@@ -29,7 +29,6 @@
     overflow-x: hidden;
   }
 
-  /* Background texture */
   body::before {
     content: '';
     position: fixed;
@@ -40,7 +39,6 @@
     z-index: 0;
   }
 
-  /* HEADER */
   header {
     position: relative;
     z-index: 10;
@@ -60,7 +58,6 @@
     letter-spacing: -0.5px;
     color: var(--accent);
   }
-
   .logo span { color: var(--text-muted); font-weight: 400; font-size: 14px; margin-left: 10px; font-family: 'JetBrains Mono', monospace; }
 
   .header-right { display: flex; align-items: center; gap: 12px; }
@@ -74,13 +71,19 @@
   }
   .view-btn.active { background: var(--accent); color: #000; }
 
-  /* MAIN */
+  /* LANG SWITCHER */
+  .lang-switcher { display: flex; gap: 4px; background: var(--surface2); padding: 4px; border-radius: 8px; }
+  .lang-btn {
+    padding: 5px 10px; border: none; border-radius: 6px;
+    background: transparent; color: var(--text-muted);
+    cursor: pointer; font-family: inherit; font-size: 11px;
+    transition: all 0.2s; font-weight: 500;
+  }
+  .lang-btn.active { background: var(--accent2); color: #fff; }
+
   main { position: relative; z-index: 1; padding: 32px 40px; max-width: 1400px; margin: 0 auto; }
 
-  /* STATS BAR */
-  .stats {
-    display: flex; gap: 16px; margin-bottom: 32px;
-  }
+  .stats { display: flex; gap: 16px; margin-bottom: 32px; }
   .stat {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -91,7 +94,6 @@
   .stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
   .stat-value { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--accent); }
 
-  /* ADD FORM */
   .add-section {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -161,7 +163,6 @@
   .btn-edit { background: transparent; border: 1px solid var(--accent2); color: var(--accent2); padding: 6px 10px; font-size: 11px; }
   .btn-edit:hover { background: var(--accent2); color: #fff; }
 
-  /* SEARCH */
   .toolbar {
     display: flex;
     align-items: center;
@@ -185,7 +186,6 @@
   .search-wrap input:focus { border-color: var(--accent); }
   .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; }
 
-  /* TABLE VIEW */
   .table-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--border); }
   table { width: 100%; border-collapse: collapse; }
   thead { background: var(--surface2); }
@@ -199,22 +199,14 @@
     font-weight: 500;
     border-bottom: 1px solid var(--border);
   }
-  tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s;
-  }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
   tbody tr:last-child { border-bottom: none; }
   tbody tr:hover { background: var(--surface2); }
-  tbody td {
-    padding: 14px 16px;
-    font-size: 13px;
-    color: var(--text);
-  }
+  tbody td { padding: 14px 16px; font-size: 13px; color: var(--text); }
   .id-cell { color: var(--text-muted); font-size: 11px; }
   .price-cell { color: var(--accent); font-weight: 500; }
   .actions-cell { display: flex; gap: 6px; }
 
-  /* CARDS VIEW */
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -241,23 +233,14 @@
   }
   .book-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.4); }
   .book-card:hover::before { opacity: 1; }
-
   .card-id { font-size: 10px; color: var(--text-muted); margin-bottom: 12px; }
-  .card-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 6px;
-    line-height: 1.3;
-  }
+  .card-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
   .card-author { font-size: 12px; color: var(--accent); margin-bottom: 16px; }
   .card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
   .card-year { font-size: 11px; color: var(--text-muted); }
   .card-price { font-size: 18px; font-weight: 500; color: var(--accent); }
   .card-actions { display: flex; gap: 8px; }
 
-  /* EDIT MODAL */
   .modal-overlay {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.7);
@@ -282,7 +265,6 @@
   .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
   .btn-secondary:hover { border-color: var(--text-muted); color: var(--text); }
 
-  /* TOAST */
   .toast {
     position: fixed; bottom: 24px; right: 24px;
     background: var(--surface2);
@@ -299,75 +281,121 @@
   .toast.success { border-color: var(--success); color: var(--success); }
   .toast.error { border-color: var(--danger); color: var(--danger); }
 
-  /* Empty state */
-  .empty {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-muted);
-  }
+  .empty { text-align: center; padding: 60px 20px; color: var(--text-muted); }
   .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
   .empty-text { font-family: 'Playfair Display', serif; font-size: 18px; }
 
   .hidden { display: none !important; }
 
-  /* Animations */
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   .book-card, tbody tr { animation: fadeIn 0.3s ease both; }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+    padding: 40px 40px;
+    background: var(--surface);
+  }
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .footer-left {}
+  .footer-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .footer-role {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
+  .footer-link {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .footer-link:hover { border-color: var(--accent); color: var(--accent); }
+  .footer-right { text-align: right; }
+  .footer-stack { font-size: 11px; color: var(--text-muted); line-height: 1.8; }
+  .footer-stack span { color: var(--accent2); }
+  .footer-copy { font-size: 10px; color: var(--text-muted); margin-top: 12px; opacity: 0.5; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">BookVault <span>/ library manager</span></div>
+  <div class="logo">BookVault <span data-i18n="subtitle">/ library manager</span></div>
   <div class="header-right">
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('ru')">RU</button>
+      <button class="lang-btn" onclick="setLang('hy')">ՀՅ</button>
+    </div>
     <div class="view-toggle">
-      <button class="view-btn active" onclick="setView('table')" id="btn-table">⊞ Table</button>
-      <button class="view-btn" onclick="setView('cards')" id="btn-cards">⊟ Cards</button>
+      <button class="view-btn active" onclick="setView('table')" id="btn-table" data-i18n="viewTable">⊞ Table</button>
+      <button class="view-btn" onclick="setView('cards')" id="btn-cards" data-i18n="viewCards">⊟ Cards</button>
     </div>
   </div>
 </header>
 
 <main>
-  <!-- Stats -->
   <div class="stats">
-    <div class="stat"><div class="stat-label">Total Books</div><div class="stat-value" id="stat-total">0</div></div>
-    <div class="stat"><div class="stat-label">Avg Price</div><div class="stat-value" id="stat-avg">$0</div></div>
-    <div class="stat"><div class="stat-label">Newest Year</div><div class="stat-value" id="stat-newest">—</div></div>
-    <div class="stat"><div class="stat-label">Authors</div><div class="stat-value" id="stat-authors">0</div></div>
+    <div class="stat"><div class="stat-label" data-i18n="statTotal">Total Books</div><div class="stat-value" id="stat-total">0</div></div>
+    <div class="stat"><div class="stat-label" data-i18n="statAvg">Avg Price</div><div class="stat-value" id="stat-avg">$0</div></div>
+    <div class="stat"><div class="stat-label" data-i18n="statNewest">Newest Year</div><div class="stat-value" id="stat-newest">—</div></div>
+    <div class="stat"><div class="stat-label" data-i18n="statAuthors">Authors</div><div class="stat-value" id="stat-authors">0</div></div>
   </div>
 
-  <!-- Add Book -->
   <div class="add-section">
-    <div class="section-title">Add New Book</div>
+    <div class="section-title" data-i18n="addTitle">Add New Book</div>
     <div class="form-grid">
-      <div class="form-group"><label>Author</label><input id="in-author" placeholder="e.g. Dostoevsky" /></div>
-      <div class="form-group"><label>Title</label><input id="in-name" placeholder="e.g. The Idiot" /></div>
-      <div class="form-group"><label>Year</label><input id="in-year" type="number" placeholder="1869" /></div>
-      <div class="form-group"><label>Price ($)</label><input id="in-price" type="number" placeholder="12" /></div>
-      <button class="btn btn-primary" onclick="addBook()">+ Add</button>
+      <div class="form-group"><label data-i18n="labelAuthor">Author</label><input id="in-author" /></div>
+      <div class="form-group"><label data-i18n="labelTitle">Title</label><input id="in-name" /></div>
+      <div class="form-group"><label data-i18n="labelYear">Year</label><input id="in-year" type="number" placeholder="1869" /></div>
+      <div class="form-group"><label data-i18n="labelPrice">Price ($)</label><input id="in-price" type="number" placeholder="12" /></div>
+      <button class="btn btn-primary" onclick="addBook()" data-i18n="btnAdd">+ Add</button>
     </div>
   </div>
 
-  <!-- Toolbar -->
   <div class="toolbar">
     <div class="search-wrap">
       <span class="search-icon">⌕</span>
-      <input id="search" placeholder="Search books..." oninput="renderBooks()" />
+      <input id="search" oninput="renderBooks()" data-i18n-placeholder="searchPlaceholder" />
     </div>
   </div>
 
-  <!-- Table View -->
   <div id="view-table">
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Year</th>
-            <th>Price</th>
-            <th>Actions</th>
+            <th data-i18n="colTitle">Title</th>
+            <th data-i18n="colAuthor">Author</th>
+            <th data-i18n="colYear">Year</th>
+            <th data-i18n="colPrice">Price</th>
+            <th data-i18n="colActions">Actions</th>
           </tr>
         </thead>
         <tbody id="table-body"></tbody>
@@ -375,37 +403,141 @@
     </div>
   </div>
 
-  <!-- Cards View -->
   <div id="view-cards" class="hidden">
     <div class="cards-grid" id="cards-body"></div>
   </div>
 </main>
 
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-name">Martin Shahinyan</div>
+      <div class="footer-role" data-i18n="footerRole">Junior Python Developer</div>
+      <div class="footer-links">
+        <a class="footer-link" href="mailto:martin.shahinyan2008@gmail.com">✉ martin.shahinyan2008@gmail.com</a>
+        <a class="footer-link" href="https://github.com/martinShahinyan" target="_blank">⌥ GitHub</a>
+        <a class="footer-link" href="https://linkedin.com/in/martin-shahinyan" target="_blank">in LinkedIn</a>
+      </div>
+    </div>
+    <div class="footer-right">
+      <div class="footer-stack">
+        <span data-i18n="footerBuiltWith">Built with</span><br>
+        <span>Python</span> · FastAPI · SQLAlchemy<br>
+        HTML · CSS · JavaScript<br>
+        <span>Yerevan, Armenia 🇦🇲</span>
+      </div>
+      <div class="footer-copy">© 2026 Martin Shahinyan</div>
+    </div>
+  </div>
+</footer>
+
 <!-- Edit Modal -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
-    <h3>Edit Book</h3>
+    <h3 data-i18n="editTitle">Edit Book</h3>
     <input type="hidden" id="edit-id" />
     <div class="form-grid">
-      <div class="form-group"><label>Author</label><input id="edit-author" /></div>
-      <div class="form-group"><label>Title</label><input id="edit-name" /></div>
-      <div class="form-group"><label>Year</label><input id="edit-year" type="number" /></div>
-      <div class="form-group"><label>Price</label><input id="edit-price" type="number" /></div>
+      <div class="form-group"><label data-i18n="labelAuthor">Author</label><input id="edit-author" /></div>
+      <div class="form-group"><label data-i18n="labelTitle">Title</label><input id="edit-name" /></div>
+      <div class="form-group"><label data-i18n="labelYear">Year</label><input id="edit-year" type="number" /></div>
+      <div class="form-group"><label data-i18n="labelPrice">Price</label><input id="edit-price" type="number" /></div>
     </div>
     <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+      <button class="btn btn-secondary" onclick="closeModal()" data-i18n="btnCancel">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()" data-i18n="btnSave">Save Changes</button>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-  const API = 'http://localhost:8000';
+  const API = 'https://bookvault-backend-0f08.onrender.com';
   let books = [];
   let currentView = 'table';
+  let currentLang = 'en';
+
+  const i18n = {
+    en: {
+      subtitle: '/ library manager',
+      viewTable: '⊞ Table', viewCards: '⊟ Cards',
+      statTotal: 'Total Books', statAvg: 'Avg Price', statNewest: 'Newest Year', statAuthors: 'Authors',
+      addTitle: 'Add New Book',
+      labelAuthor: 'Author', labelTitle: 'Title', labelYear: 'Year', labelPrice: 'Price ($)',
+      btnAdd: '+ Add',
+      searchPlaceholder: 'Search books...',
+      colTitle: 'Title', colAuthor: 'Author', colYear: 'Year', colPrice: 'Price', colActions: 'Actions',
+      editTitle: 'Edit Book', btnCancel: 'Cancel', btnSave: 'Save Changes',
+      btnEdit: 'Edit', btnDelete: 'Delete',
+      footerRole: 'Junior Python Developer',
+      footerBuiltWith: 'Built with',
+      emptyText: 'No books found',
+      toastAdded: 'Book added!', toastDeleted: 'Book deleted', toastUpdated: 'Book updated!',
+      toastFillAll: 'Fill all fields', toastError: 'Error. Try again.',
+      toastNoAPI: 'Cannot connect to API. Make sure FastAPI is running on port 8000.',
+      confirmDelete: 'Delete this book?',
+    },
+    ru: {
+      subtitle: '/ менеджер библиотеки',
+      viewTable: '⊞ Таблица', viewCards: '⊟ Карточки',
+      statTotal: 'Всего книг', statAvg: 'Средняя цена', statNewest: 'Новейший год', statAuthors: 'Авторы',
+      addTitle: 'Добавить книгу',
+      labelAuthor: 'Автор', labelTitle: 'Название', labelYear: 'Год', labelPrice: 'Цена ($)',
+      btnAdd: '+ Добавить',
+      searchPlaceholder: 'Поиск книг...',
+      colTitle: 'Название', colAuthor: 'Автор', colYear: 'Год', colPrice: 'Цена', colActions: 'Действия',
+      editTitle: 'Редактировать', btnCancel: 'Отмена', btnSave: 'Сохранить',
+      btnEdit: 'Изменить', btnDelete: 'Удалить',
+      footerRole: 'Junior Python разработчик',
+      footerBuiltWith: 'Сделано с',
+      emptyText: 'Книги не найдены',
+      toastAdded: 'Книга добавлена!', toastDeleted: 'Книга удалена', toastUpdated: 'Книга обновлена!',
+      toastFillAll: 'Заполните все поля', toastError: 'Ошибка. Попробуйте ещё раз.',
+      toastNoAPI: 'Нет соединения с API. Убедитесь что FastAPI запущен на порту 8000.',
+      confirmDelete: 'Удалить эту книгу?',
+    },
+    hy: {
+      subtitle: '/ գրադարանի կառավարիչ',
+      viewTable: '⊞ Աղյուսակ', viewCards: '⊟ Քարտեր',
+      statTotal: 'Ընդամենը', statAvg: 'Միջ. գին', statNewest: 'Նորագույն', statAuthors: 'Հեղինակներ',
+      addTitle: 'Ավելացնել գիրք',
+      labelAuthor: 'Հեղինակ', labelTitle: 'Վերնագիր', labelYear: 'Տարի', labelPrice: 'Գին ($)',
+      btnAdd: '+ Ավելացնել',
+      searchPlaceholder: 'Որոնել գրքեր...',
+      colTitle: 'Վերնագիր', colAuthor: 'Հեղինակ', colYear: 'Տարի', colPrice: 'Գին', colActions: 'Գործողություններ',
+      editTitle: 'Խմբագրել', btnCancel: 'Չեղարկել', btnSave: 'Պահպանել',
+      btnEdit: 'Փոփոխել', btnDelete: 'Ջնջել',
+      footerRole: 'Junior Python ծրագրավորող',
+      footerBuiltWith: 'Ստեղծված է',
+      emptyText: 'Գրքեր չեն գտնվել',
+      toastAdded: 'Գիրքն ավելացվեց!', toastDeleted: 'Գիրքը ջնջվեց', toastUpdated: 'Գիրքը թարմացվեց!',
+      toastFillAll: 'Լրացրեք բոլոր դաշտերը', toastError: 'Սխալ. Կրկին փորձեք.',
+      toastNoAPI: 'API-ի հետ կապ չկա: Համոզվեք, որ FastAPI-ն աշխատում է 8000 պորտով:',
+      confirmDelete: 'Ջնջե՞լ այս գիրքը:',
+    }
+  };
+
+  function t(key) { return i18n[currentLang][key] || i18n['en'][key] || key; }
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+    applyTranslations();
+    renderBooks();
+  }
+
+  function applyTranslations() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      el.textContent = t(key);
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      el.placeholder = t(key);
+    });
+  }
 
   async function fetchBooks() {
     try {
@@ -414,7 +546,7 @@
       renderBooks();
       updateStats();
     } catch {
-      showToast('Cannot connect to API. Make sure FastAPI is running on port 8000.', 'error');
+      showToast(t('toastNoAPI'), 'error');
     }
   }
 
@@ -447,7 +579,7 @@
   function renderTable(data) {
     const tbody = document.getElementById('table-body');
     if (!data.length) {
-      tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-icon">📚</div><div class="empty-text">No books found</div></div></td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="empty-icon">📚</div><div class="empty-text">${t('emptyText')}</div></div></td></tr>`;
       return;
     }
     tbody.innerHTML = data.map((b, i) => `
@@ -458,8 +590,8 @@
         <td>${b.year}</td>
         <td class="price-cell">$${b.price}</td>
         <td class="actions-cell">
-          <button class="btn btn-edit" onclick="openEdit(${b.id})">Edit</button>
-          <button class="btn btn-danger" onclick="deleteBook(${b.id})">Delete</button>
+          <button class="btn btn-edit" onclick="openEdit(${b.id})">${t('btnEdit')}</button>
+          <button class="btn btn-danger" onclick="deleteBook(${b.id})">${t('btnDelete')}</button>
         </td>
       </tr>
     `).join('');
@@ -468,7 +600,7 @@
   function renderCards(data) {
     const grid = document.getElementById('cards-body');
     if (!data.length) {
-      grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📚</div><div class="empty-text">No books found</div></div>`;
+      grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">📚</div><div class="empty-text">${t('emptyText')}</div></div>`;
       return;
     }
     grid.innerHTML = data.map((b, i) => `
@@ -481,7 +613,7 @@
           <span class="card-price">$${b.price}</span>
         </div>
         <div class="card-actions">
-          <button class="btn btn-edit" style="flex:1" onclick="openEdit(${b.id})">Edit</button>
+          <button class="btn btn-edit" style="flex:1" onclick="openEdit(${b.id})">${t('btnEdit')}</button>
           <button class="btn btn-danger" onclick="deleteBook(${b.id})">✕</button>
         </div>
       </div>
@@ -493,9 +625,7 @@
     const name = document.getElementById('in-name').value.trim();
     const year = parseInt(document.getElementById('in-year').value);
     const price = parseInt(document.getElementById('in-price').value);
-
-    if (!author || !name || !year || !price) { showToast('Fill all fields', 'error'); return; }
-
+    if (!author || !name || !year || !price) { showToast(t('toastFillAll'), 'error'); return; }
     try {
       const res = await fetch(`${API}/addbook`, {
         method: 'POST',
@@ -504,19 +634,19 @@
       });
       if (res.ok) {
         ['in-author','in-name','in-year','in-price'].forEach(id => document.getElementById(id).value = '');
-        showToast('Book added!', 'success');
+        showToast(t('toastAdded'), 'success');
         fetchBooks();
       }
-    } catch { showToast('Error adding book', 'error'); }
+    } catch { showToast(t('toastError'), 'error'); }
   }
 
   async function deleteBook(id) {
-    if (!confirm('Delete this book?')) return;
+    if (!confirm(t('confirmDelete'))) return;
     try {
       await fetch(`${API}/books/delete/${id}`, { method: 'DELETE' });
-      showToast('Book deleted', 'success');
+      showToast(t('toastDeleted'), 'success');
       fetchBooks();
-    } catch { showToast('Error deleting book', 'error'); }
+    } catch { showToast(t('toastError'), 'error'); }
   }
 
   function openEdit(id) {
@@ -530,9 +660,7 @@
     document.getElementById('modal').classList.add('open');
   }
 
-  function closeModal() {
-    document.getElementById('modal').classList.remove('open');
-  }
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
 
   async function saveEdit() {
     const id = document.getElementById('edit-id').value;
@@ -540,15 +668,12 @@
     const name = document.getElementById('edit-name').value.trim();
     const year = parseInt(document.getElementById('edit-year').value);
     const price = parseInt(document.getElementById('edit-price').value);
-
     try {
-      await fetch(`${API}/books/update/${id}?new_author=${encodeURIComponent(author)}&new_year=${year}&new_name=${encodeURIComponent(name)}&new_price=${price}`, {
-        method: 'PUT'
-      });
+      await fetch(`${API}/books/update/${id}?new_author=${encodeURIComponent(author)}&new_year=${year}&new_name=${encodeURIComponent(name)}&new_price=${price}`, { method: 'PUT' });
       closeModal();
-      showToast('Book updated!', 'success');
+      showToast(t('toastUpdated'), 'success');
       fetchBooks();
-    } catch { showToast('Error updating book', 'error'); }
+    } catch { showToast(t('toastError'), 'error'); }
   }
 
   function setView(v) {
@@ -566,11 +691,11 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  // Close modal on overlay click
   document.getElementById('modal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
 
+  applyTranslations();
   fetchBooks();
 </script>
 </body>
