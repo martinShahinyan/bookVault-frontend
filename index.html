@@ -237,8 +237,8 @@
 <main>
   <!-- PAGE TABS -->
   <div class="page-tabs" id="page-tabs">
-    <button class="page-tab active" onclick="setPage('books')" data-i18n="pageBooks">📚 Books</button>
-    <button class="page-tab admin-tab hidden" id="admin-tab-btn" onclick="setPage('admin')" data-i18n="pageAdmin">⚙ Admin</button>
+    <button class="page-tab active" onclick="setPage('books', this)" data-i18n="pageBooks">📚 Books</button>
+    <button class="page-tab admin-tab hidden" id="admin-tab-btn" onclick="setPage('admin', this)" data-i18n="pageAdmin">⚙ Admin</button>
   </div>
 
   <!-- BOOKS PAGE -->
@@ -440,6 +440,13 @@
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => el.placeholder = tr(el.getAttribute('data-i18n-placeholder')));
   }
 
+  function getErrMsg(e) {
+    if (!e) return tr('toastError');
+    if (typeof e.detail === 'string') return e.detail;
+    if (Array.isArray(e.detail) && e.detail.length > 0) return e.detail[0].msg || tr('toastError');
+    return tr('toastError');
+  }
+
   // ── AUTH ──
   function switchAuthTab(tab) {
     document.getElementById('form-login').classList.toggle('hidden', tab !== 'login');
@@ -457,8 +464,8 @@
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ gmail, password })
       });
-      if (!res.ok) { const e = await res.json(); showToast(e.detail, 'error'); return; }
       const data = await res.json();
+      if (!res.ok) { showToast(getErrMsg(data), 'error'); return; }
       token = data.token;
       currentUser = { name: data.name, gmail, is_admin: data.is_admin };
       localStorage.setItem('bv_token', token);
@@ -479,7 +486,8 @@
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, surname, gmail, password })
       });
-      if (!res.ok) { const e = await res.json(); showToast(e.detail, 'error'); return; }
+      const data = await res.json();
+      if (!res.ok) { showToast(getErrMsg(data), 'error'); return; }
       showToast(tr('toastRegistered'), 'success');
       switchAuthTab('login');
       document.getElementById('l-email').value = gmail;
@@ -513,22 +521,23 @@
     try {
       const res = await fetch(`${API}/books`);
       if (res.status === 404) { books = []; renderBooks(); updateStats(); return; }
-      books = await res.json();
+      const data = await res.json();
+      books = Array.isArray(data) ? data : [];
       renderBooks(); updateStats();
     } catch { showToast(tr('toastError'), 'error'); }
   }
 
   function updateStats() {
     document.getElementById('stat-total').textContent = books.length;
-    const avg = books.length ? (books.reduce((s,b) => s+b.price, 0)/books.length).toFixed(0) : 0;
+    const avg = books.length ? (books.reduce((s,b) => s+(b.price||0), 0)/books.length).toFixed(0) : 0;
     document.getElementById('stat-avg').textContent = '$'+avg;
-    document.getElementById('stat-newest').textContent = books.length ? Math.max(...books.map(b=>b.year)) : '—';
+    document.getElementById('stat-newest').textContent = books.length ? Math.max(...books.map(b=>b.year||0)) : '—';
     document.getElementById('stat-authors').textContent = new Set(books.map(b=>b.author)).size;
   }
 
   function getFiltered() {
     const q = document.getElementById('search').value.toLowerCase();
-    return q ? books.filter(b => b.name.toLowerCase().includes(q) || b.author.toLowerCase().includes(q) || String(b.year).includes(q)) : books;
+    return q ? books.filter(b => (b.name&&b.name.toLowerCase().includes(q)) || (b.author&&b.author.toLowerCase().includes(q)) || String(b.year).includes(q)) : books;
   }
 
   function renderBooks() {
@@ -575,10 +584,11 @@
     const name = document.getElementById('in-name').value.trim();
     const year = parseInt(document.getElementById('in-year').value);
     const price = parseInt(document.getElementById('in-price').value);
-    if (!author || !name || !year || !price) { showToast(tr('toastFillAll'), 'error'); return; }
+    if (!author || !name || isNaN(year) || isNaN(price)) { showToast(tr('toastFillAll'), 'error'); return; }
     try {
       const res = await fetch(`${API}/addbook`, { method: 'POST', headers: authHeaders(), body: JSON.stringify({author, name, year, price}) });
-      if (!res.ok) { const e = await res.json(); showToast(e.detail, 'error'); return; }
+      const data = await res.json();
+      if (!res.ok) { showToast(getErrMsg(data), 'error'); return; }
       ['in-author','in-name','in-year','in-price'].forEach(id => document.getElementById(id).value = '');
       showToast(tr('toastAdded'), 'success'); fetchBooks();
     } catch { showToast(tr('toastError'), 'error'); }
@@ -587,7 +597,8 @@
   async function deleteBook(id) {
     if (!confirm(tr('confirmDelete'))) return;
     try {
-      await fetch(`${API}/books/delete/${id}`, { method: 'DELETE', headers: authHeaders() });
+      const res = await fetch(`${API}/books/delete/${id}`, { method: 'DELETE', headers: authHeaders() });
+      if (!res.ok) { const e = await res.json(); showToast(getErrMsg(e), 'error'); return; }
       showToast(tr('toastDeleted'), 'success'); fetchBooks();
     } catch { showToast(tr('toastError'), 'error'); }
   }
@@ -610,8 +621,15 @@
     const name = document.getElementById('edit-name').value.trim();
     const year = parseInt(document.getElementById('edit-year').value);
     const price = parseInt(document.getElementById('edit-price').value);
+    if (!author || !name || isNaN(year) || isNaN(price)) { showToast(tr('toastFillAll'), 'error'); return; }
     try {
-      await fetch(`${API}/books/update/${id}?new_author=${encodeURIComponent(author)}&new_year=${year}&new_name=${encodeURIComponent(name)}&new_price=${price}`, { method: 'PUT', headers: authHeaders() });
+      const res = await fetch(`${API}/books/update/${id}`, {
+        method: 'PUT',
+        headers: authHeaders(),
+        body: JSON.stringify({ author, name, year, price })
+      });
+      const data = await res.json();
+      if (!res.ok) { showToast(getErrMsg(data), 'error'); return; }
       closeModal(); showToast(tr('toastUpdated'), 'success'); fetchBooks();
     } catch { showToast(tr('toastError'), 'error'); }
   }
@@ -623,10 +641,10 @@
         fetch(`${API}/admin/users`, { headers: authHeaders() }),
         fetch(`${API}/admin/logs`, { headers: authHeaders() })
       ]);
-      const users = await usersRes.json();
-      const logs = await logsRes.json();
-      renderAdminUsers(users);
-      renderAdminLogs(logs);
+      const users = usersRes.ok ? await usersRes.json() : [];
+      const logs = logsRes.ok ? await logsRes.json() : [];
+      renderAdminUsers(Array.isArray(users) ? users : []);
+      renderAdminLogs(Array.isArray(logs) ? logs : []);
     } catch { showToast(tr('toastError'), 'error'); }
   }
 
@@ -656,18 +674,20 @@
   async function deleteUser(id) {
     if (!confirm('Delete this user?')) return;
     try {
-      await fetch(`${API}/admin/users/${id}`, { method: 'DELETE', headers: authHeaders() });
+      const res = await fetch(`${API}/admin/users/${id}`, { method: 'DELETE', headers: authHeaders() });
+      if (!res.ok) { const e = await res.json(); showToast(getErrMsg(e), 'error'); return; }
       showToast('User deleted', 'success'); fetchAdminData();
     } catch { showToast(tr('toastError'), 'error'); }
   }
 
   // ── UI ──
-  function setPage(page) {
+  function setPage(page, targetBtn) {
     currentPage = page;
     document.getElementById('page-books').classList.toggle('hidden', page !== 'books');
     document.getElementById('page-admin').classList.toggle('hidden', page !== 'admin');
     document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+    const btn = targetBtn || (page === 'admin' ? document.getElementById('admin-tab-btn') : document.querySelector('.page-tab'));
+    if (btn) btn.classList.add('active');
     if (page === 'admin') fetchAdminData();
   }
 
